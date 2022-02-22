@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('core.dashboard');
 });
+
+Route::get('reservations', function () {
+    return view('core.reservations');
+})->name('reservations.index');
+
+Route::post('reservations', [ReservationController::class, 'store'])->name('reservations.store');

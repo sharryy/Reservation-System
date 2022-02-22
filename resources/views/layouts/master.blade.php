@@ -30,18 +30,18 @@
 
         <nav role="navigation" class="probootstrap-nav hidden-xs">
             <ul class="probootstrap-main-nav">
-                <li class="active"><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="rooms.html">Our Rooms</a></li>
-                <li class="hidden-xs probootstrap-logo-center"><a href="index.html"><img
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Our Rooms</a></li>
+                <li class="hidden-xs probootstrap-logo-center"><a href="#"><img
                             src="{{ asset('img/logo_md.png') }}"
                             class="hires"
                             width="181" height="50"
                             alt="Free Bootstrap Template by uicookies.com"></a>
                 </li>
-                <li><a href="reservation.html">Reservation</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="{{ route('reservations.index') }}">Reservation</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Contact</a></li>
             </ul>
             <div class="extra-text visible-xs">
                 <a href="#" class="probootstrap-burger-menu"><i>Menu</i></a>
