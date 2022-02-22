@@ -385,7 +385,7 @@
 </section>
 
 <section class="probootstrap-half">
-    <div class="image" style="background-image: url(img/slider_2.jpg);"></div>
+    <div class="image" style="background-image: url('public/img/slider_2.jpg');"></div>
     <div class="text">
         <div class="probootstrap-animate fadeInUp probootstrap-animated">
             <h2 class="mt0">Best 5 Star hotel</h2>
