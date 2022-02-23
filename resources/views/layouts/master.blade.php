@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles-merged.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-
+    @livewireStyles
 </head>
 <body>
 
@@ -154,6 +154,6 @@
 <script src="{{ asset('js/scripts.min.js') }}"></script>
 <script src="{{ asset('js/main.min.js') }}"></script>
 <script src="{{ asset('js/custom.js') }}"></script>
-
+@livewireScripts
 </body>
 </html>
