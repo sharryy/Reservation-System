@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use Carbon\Carbon;
+use App\Helpers\CustomDate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Str;
@@ -29,7 +29,7 @@ class Reservation extends Component
     public $room_type = '';
 
     protected $rules = [
-        'arrival_date' => 'required|date',
+        'arrival_date' => 'required|date|after_or_equal:today',
         'departure_date' => 'required|date|after_or_equal:arrival_date',
         'amount' => 'required|numeric|min:0',
         'name' => 'required|string',
@@ -134,7 +134,8 @@ class Reservation extends Component
 
     public function validateArrivalAndDepartureDate($value)
     {
-        $difference = Carbon::parse($value)->diffInDays(Carbon::parse($this->arrival_date));
+        $difference = CustomDate::myCustomParse($value)->diffInDays(CustomDate::myCustomParse($this->arrival_date));
+        $this->resetErrorBag('departure_date');
         if ($difference > 7) {
             $this->addError('departure_date', 'Departure date must be within 7 days of arrival date.');
         } else {
@@ -146,10 +147,10 @@ class Reservation extends Component
     public function validateDateField($value, $reset_key = '')
     {
         try {
-            $corrected_date = Carbon::parse($value)->format('m/d/Y');
+            $corrected_date = CustomDate::myCustomParse($value)->format('d/m/Y');
             $this->resetErrorBag($reset_key);
             if ($corrected_date != $value) {
-                $this->addError($reset_key, 'Invalid date format. Use MM/DD/YYYY');
+                $this->addError($reset_key, 'Invalid date format. Use DD/MM/YYYY');
             } else {
                 return true;
             }

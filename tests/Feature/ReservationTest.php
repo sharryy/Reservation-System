@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Helpers\CustomDate;
 use App\Http\Livewire\Reservation;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
@@ -20,10 +21,19 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
+    function it_tests_if_arrival_date_is_greater_than_today()
+    {
+        Livewire::test(Reservation::class)
+            ->set('arrival_date', Carbon::now()->subDay(10))
+            ->call('save')
+            ->assertHasErrors('arrival_date');
+    }
+
+    /** @test */
     function it_tests_if_arrival_date_is_in_dd_mm_yyyy_format()
     {
         Livewire::test(Reservation::class)
-            ->set('arrival_date', Carbon::now()->format('m/d/Y'))
+            ->set('arrival_date', Carbon::now()->format('d/m/Y'))
             ->assertHasNoErrors('arrival_date');
     }
 
@@ -48,7 +58,8 @@ class ReservationTest extends TestCase
     function it_checks_if_departure_date_is_in_dd_mm_yyyy_format()
     {
         Livewire::test(Reservation::class)
-            ->set('departure_date', Carbon::now()->format('m/d/Y'))
+            ->set('departure_date', CustomDate::myCustomParse('26/02/2022')->format('d/m/Y'))
+            ->call('save')
             ->assertHasNoErrors('departure_date');
     }
 
@@ -64,10 +75,10 @@ class ReservationTest extends TestCase
     function it_checks_if_arrival_date_is_before_departure_date()
     {
         Livewire::test(Reservation::class)
-            ->set('arrival_date', Carbon::now()->format('m/d/Y'))
-            ->set('departure_date', Carbon::now()->addDays(3)->format('m/d/Y'))
+            ->set('arrival_date', Carbon::now()->format('d/m/Y'))
+            ->set('departure_date', Carbon::now()->addDays(3)->format('d/m/Y'))
             ->assertHasNoErrors()
-            ->set('departure_date', Carbon::now()->subDays(10)->format('m/d/Y'))
+            ->set('departure_date', Carbon::now()->subDays(10)->format('d/m/Y'))
             ->assertHasErrors('departure_date');
     }
 
@@ -75,10 +86,10 @@ class ReservationTest extends TestCase
     function if_checks_if_departure_date_is_within_seven_days_of_arrival_date()
     {
         Livewire::test(Reservation::class)
-            ->set('arrival_date', Carbon::now()->format('m/d/Y'))
-            ->set('departure_date', Carbon::now()->addDays(7)->format('m/d/Y'))
+            ->set('arrival_date', Carbon::now()->format('d/m/Y'))
+            ->set('departure_date', Carbon::now()->addDays(7)->format('d/m/Y'))
             ->assertHasNoErrors()
-            ->set('departure_date', Carbon::now()->addDays(8)->format('m/d/Y'))
+            ->set('departure_date', Carbon::now()->addDays(8)->format('d/m/Y'))
             ->assertHasErrors('departure_date');
     }
 
@@ -184,7 +195,7 @@ class ReservationTest extends TestCase
     function it_checks_if_birthday_is_in_dd_mm_yyyy_format()
     {
         Livewire::test(Reservation::class)
-            ->set('birthday', Carbon::now()->format('m/d/Y'))
+            ->set('birthday', Carbon::now()->format('d/m/Y'))
             ->assertHasNoErrors('birthday');
     }
 
