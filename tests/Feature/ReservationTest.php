@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Helpers\CustomDate;
 use App\Http\Livewire\Reservation;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
@@ -52,15 +51,6 @@ class ReservationTest extends TestCase
             ->set('departure_date', null)
             ->call('save')
             ->assertHasErrors('departure_date');
-    }
-
-    /** @test */
-    function it_checks_if_departure_date_is_in_dd_mm_yyyy_format()
-    {
-        Livewire::test(Reservation::class)
-            ->set('departure_date', CustomDate::myCustomParse('26/02/2022')->format('d/m/Y'))
-            ->call('save')
-            ->assertHasNoErrors('departure_date');
     }
 
     /** @test */

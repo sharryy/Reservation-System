@@ -20,7 +20,6 @@ class Reservation extends Component
     public $cnic_picture = '';
     public $rating = '';
 
-
     public $show_amount_field = false;
     public $show_details_field = false;
     public $show_pic_field = false;
@@ -29,11 +28,11 @@ class Reservation extends Component
     public $room_type = '';
 
     protected $rules = [
-        'arrival_date' => 'required|date|after_or_equal:today',
-        'departure_date' => 'required|date|after_or_equal:arrival_date',
+        'arrival_date' => 'required|after_or_equal:today',
+        'departure_date' => 'required|after_or_equal:arrival_date',
         'amount' => 'required|numeric|min:0',
         'name' => 'required|string',
-        'birthday' => 'required|date',
+        'birthday' => 'required',
         'cnic' => 'required|string|min:13|max:13',
         'cnic_picture' => 'required|image|mimes:jpeg,png',
         'rating' => 'numeric|in:1,2,3,4,5',
@@ -100,6 +99,7 @@ class Reservation extends Component
     public function updatedAmount($value)
     {
         $this->show_details_field = true;
+        $this->resetErrorBag('amount');
         if ($value < 10000) $this->room_type = 'Studio';
         else if ($value <= 25000) $this->room_type = 'Executive Suite';
         else if ($value >= 50000) $this->room_type = 'Cabana';
@@ -128,8 +128,6 @@ class Reservation extends Component
             $this->reset('arrival_date', 'departure_date', 'amount', 'name', 'birthday', 'cnic', 'cnic_picture');
             $this->redirect('/reservations');
         }
-
-        dd($response->toArray());
     }
 
     public function validateArrivalAndDepartureDate($value)
