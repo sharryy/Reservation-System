@@ -153,7 +153,6 @@
 
 <script src="{{ asset('js/scripts.min.js') }}"></script>
 <script src="{{ asset('js/main.min.js') }}"></script>
-<script src="{{ asset('js/custom.js') }}"></script>
 @livewireScripts
 </body>
 </html>
