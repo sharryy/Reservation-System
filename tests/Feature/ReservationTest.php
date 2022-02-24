@@ -291,4 +291,49 @@ class ReservationTest extends TestCase
             ->call('save')
             ->assertHasNoErrors('cnic_picture');
     }
+
+    /** @test */
+    function it_checks_rating_field_is_required()
+    {
+        Livewire::test(Reservation::class)
+            ->set('rating', null)
+            ->call('save')
+            ->assertHasErrors('rating');
+    }
+
+    /** @test */
+    function it_checks_rating_field_is_not_numeric()
+    {
+        Livewire::test(Reservation::class)
+            ->set('rating', 'abc')
+            ->call('save')
+            ->assertHasErrors('rating');
+    }
+
+    /** @test */
+    function it_checks_rating_field_is_not_less_than_1()
+    {
+        Livewire::test(Reservation::class)
+            ->set('rating', 0)
+            ->call('save')
+            ->assertHasErrors('rating');
+    }
+
+    /** @test */
+    function it_checks_rating_field_is_not_more_than_5()
+    {
+        Livewire::test(Reservation::class)
+            ->set('rating', 6)
+            ->call('save')
+            ->assertHasErrors('rating');
+    }
+
+    /** @test */
+    function it_checks_rating_field_is_valid_between_1_and_5()
+    {
+        Livewire::test(Reservation::class)
+            ->set('rating', rand(1, 5))
+            ->call('save')
+            ->assertHasNoErrors('rating');
+    }
 }

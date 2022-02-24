@@ -18,10 +18,12 @@ class Reservation extends Component
     public $birthday = '';
     public $cnic = '';
     public $cnic_picture = '';
+    public $rating = '';
 
-    public $show_amount_field = true;
-    public $show_details_field = true;
-    public $show_pic_field = true;
+    public $show_amount_field = false;
+    public $show_details_field = false;
+    public $show_pic_field = false;
+    public $show_rating_field = false;
 
     protected $room_type = '';
 
@@ -33,7 +35,7 @@ class Reservation extends Component
         'birthday' => 'required|date',
         'cnic' => 'required|string|min:13|max:13',
         'cnic_picture' => 'required|image|mimes:jpeg,png',
-//        'rating' => 'filled|numeric|in:1,2,3,4,5',
+        'rating' => 'required|numeric|in:1,2,3,4,5',
     ];
 
     protected $validationAttributes = [
@@ -62,7 +64,16 @@ class Reservation extends Component
     {
         $this->validateOnly('cnic');
         $this->show_pic_field = true;
+    }
 
+    public function updatedCnicPicture()
+    {
+        $this->show_rating_field = true;
+    }
+
+    public function updatedRating()
+    {
+        $this->validateOnly('rating');
     }
 
     public function render()
@@ -106,7 +117,7 @@ class Reservation extends Component
             'cnic' => $this->cnic,
             'room_type' => $this->room_type,
             'cnic_image_path' => $cnic_path,
-            'rating' => 2
+            'rating' => $this->rating
         ]);
 
         if ($response) {

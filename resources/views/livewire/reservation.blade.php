@@ -65,10 +65,21 @@
                     @if($show_pic_field)
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="exampleFormControlFile1">Add CNIC</label>
+                                <label for="cnic_pic">Add CNIC</label>
                                 <input wire:model="cnic_picture" type="file" class="form-control-file"
-                                       id="exampleFormControlFile1">
+                                       id="cnic_pic">
                                 @error('cnic_picture') <span class="error text-danger">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($show_rating_field)
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="rating">Add Rating</label>
+                                <input wire:model="rating" type="number" class="form-control"
+                                       id="rating">
+                                @error('rating') <span class="error text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
                     @endif
