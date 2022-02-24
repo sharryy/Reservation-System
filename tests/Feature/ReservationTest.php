@@ -72,13 +72,23 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
-    function if_checks_if_departure_date_is_within_seven_days_of_arrival_date(){
+    function if_checks_if_departure_date_is_within_seven_days_of_arrival_date()
+    {
         Livewire::test(Reservation::class)
             ->set('arrival_date', Carbon::now()->format('m/d/Y'))
             ->set('departure_date', Carbon::now()->addDays(7)->format('m/d/Y'))
             ->assertHasNoErrors()
             ->set('departure_date', Carbon::now()->addDays(8)->format('m/d/Y'))
             ->assertHasErrors('departure_date');
+    }
+
+    /** @test */
+    function it_checks_if_amount_is_required()
+    {
+        Livewire::test(Reservation::class)
+            ->set('amount', null)
+            ->call('save')
+            ->assertHasErrors('amount');
     }
 
     /** @test */
@@ -127,6 +137,15 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
+    function it_checks_if_name_is_required()
+    {
+        Livewire::test(Reservation::class)
+            ->set('name', null)
+            ->call('save')
+            ->assertHasErrors('name');
+    }
+
+    /** @test */
     function it_checks_if_name_is_not_in_title_case()
     {
         Livewire::test(Reservation::class)
@@ -153,6 +172,15 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
+    function it_checks_if_birthday_is_required()
+    {
+        Livewire::test(Reservation::class)
+            ->set('birthday', null)
+            ->call('save')
+            ->assertHasErrors('birthday');
+    }
+
+    /** @test */
     function it_checks_if_birthday_is_in_dd_mm_yyyy_format()
     {
         Livewire::test(Reservation::class)
@@ -166,6 +194,15 @@ class ReservationTest extends TestCase
         Livewire::test(Reservation::class)
             ->set('birthday', Carbon::now()->format('d f m Y'))
             ->assertHasErrors('birthday');
+    }
+
+    /** @test */
+    function if_checks_if_cnic_is_required()
+    {
+        Livewire::test(Reservation::class)
+            ->set('cnic', null)
+            ->call('save')
+            ->assertHasErrors('cnic');
     }
 
     /** @test */
@@ -214,6 +251,15 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
+    function it_checks_if_cnic_picture_is_required()
+    {
+        Livewire::test(Reservation::class)
+            ->set('cnic_picture', null)
+            ->call('save')
+            ->assertHasErrors('cnic_picture');
+    }
+
+    /** @test */
     function it_checks_if_cnic_picture_is_other_than_png_or_jpeg()
     {
         $file = UploadedFile::fake()->create('cnic.pdf');
@@ -245,6 +291,4 @@ class ReservationTest extends TestCase
             ->call('save')
             ->assertHasNoErrors('cnic_picture');
     }
-
-
 }
