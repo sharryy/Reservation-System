@@ -293,7 +293,7 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
-    function it_checks_rating_field_is_required()
+    function it_checks_rating_field_is_not_required()
     {
         Livewire::test(Reservation::class)
             ->set('rating', null)
@@ -336,4 +336,41 @@ class ReservationTest extends TestCase
             ->call('save')
             ->assertHasNoErrors('rating');
     }
+
+    /** @test */
+    function it_checks_room_type_is_studio_if_amount_is_less_than_10000()
+    {
+        Livewire::test(Reservation::class)
+            ->set('amount', rand(1, 9999))
+            ->call('save')
+            ->assertSet('room_type', 'Studio');
+    }
+
+    /** @test */
+    function it_checks_room_type_is_executive_if_amount_is_greater_than_10000_but_less_than_equal_to_25000()
+    {
+        Livewire::test(Reservation::class)
+            ->set('amount', rand(10000, 25000))
+            ->call('save')
+            ->assertSet('room_type', 'Executive Suite');
+    }
+
+    /** @test */
+    function it_checks_room_type_is_cabana_if_amount_is_greater_than_50000()
+    {
+        Livewire::test(Reservation::class)
+            ->set('amount', rand(50000, 100000))
+            ->call('save')
+            ->assertSet('room_type', 'Cabana');
+    }
+
+    /** @test */
+    function it_checks_no_room_is_given_for_amount_between_25001_and_49999()
+    {
+        Livewire::test(Reservation::class)
+            ->set('amount', rand(25001, 49999))
+            ->call('save')
+            ->assertSet('room_type', null);
+    }
+
 }

@@ -20,12 +20,13 @@ class Reservation extends Component
     public $cnic_picture = '';
     public $rating = '';
 
+
     public $show_amount_field = false;
     public $show_details_field = false;
     public $show_pic_field = false;
     public $show_rating_field = false;
 
-    protected $room_type = '';
+    public $room_type = '';
 
     protected $rules = [
         'arrival_date' => 'required|date',
@@ -35,7 +36,7 @@ class Reservation extends Component
         'birthday' => 'required|date',
         'cnic' => 'required|string|min:13|max:13',
         'cnic_picture' => 'required|image|mimes:jpeg,png',
-        'rating' => 'required|numeric|in:1,2,3,4,5',
+        'rating' => 'numeric|in:1,2,3,4,5',
     ];
 
     protected $validationAttributes = [
@@ -69,6 +70,9 @@ class Reservation extends Component
     public function updatedCnicPicture()
     {
         $this->show_rating_field = true;
+        if ($this->validateOnly('cnic_picture')) {
+            $this->resetErrorBag('cnic_picture');
+        }
     }
 
     public function updatedRating()
@@ -124,6 +128,8 @@ class Reservation extends Component
             $this->reset('arrival_date', 'departure_date', 'amount', 'name', 'birthday', 'cnic', 'cnic_picture');
             $this->redirect('/reservations');
         }
+
+        dd($response->toArray());
     }
 
     public function validateArrivalAndDepartureDate($value)
