@@ -9,6 +9,7 @@ This application is a quick demo of Test-Driven Development (TDD) using Laravel,
 - Run `composer install` to install required dependencies
 - Rename or copy `.env.example` file to `.env`
 - Run `php artisan key:generate`to set application key.
+- Change `DB_CONNECTION` to `sqlite` in `.env`
 - Run `touch database/database.sqlite` to generate local sqlite file.
 - Run `php artisan serve` to start Laravel Development Server.
 - Visit `http://127.0.0.1:8000/` in your browser
