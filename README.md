@@ -1,4 +1,4 @@
-# Laravel HTTP Client Example
+# Laravel TDD Example
 
 This application is a quick demo of Test-Driven Development (TDD) using Laravel, Livewire and Bootstrap. 
 
