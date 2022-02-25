@@ -22,4 +22,3 @@ Route::get('reservations', function () {
     return view('core.reservations');
 })->name('reservations.index');
 
-Route::post('reservations', [ReservationController::class, 'store'])->name('reservations.store');

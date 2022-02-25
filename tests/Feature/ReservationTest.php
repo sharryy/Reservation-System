@@ -20,7 +20,7 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
-    function it_tests_if_arrival_date_is_greater_than_today()
+    function it_checks_if_arrival_date_is_less_than_today()
     {
         Livewire::test(Reservation::class)
             ->set('arrival_date', Carbon::now()->subDay(10))
@@ -29,10 +29,19 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
+    function it_checks_if_arrival_date_is_greater_than_today()
+    {
+        Livewire::test(Reservation::class)
+            ->set('arrival_date', Carbon::now()->addDay(10))
+            ->call('save')
+            ->assertHasNoErrors('arrival_date');
+    }
+
+    /** @test */
     function it_tests_if_arrival_date_is_in_dd_mm_yyyy_format()
     {
         Livewire::test(Reservation::class)
-            ->set('arrival_date', Carbon::now()->format('d/m/Y'))
+            ->set('arrival_date', "25-05-2022")
             ->assertHasNoErrors('arrival_date');
     }
 
@@ -41,6 +50,14 @@ class ReservationTest extends TestCase
     {
         Livewire::test(Reservation::class)
             ->set('arrival_date', Carbon::now()->format('d f m Y'))
+            ->assertHasErrors('arrival_date');
+    }
+
+    /** @test */
+    function it_checks_if_arrival_date_contain_alphanumeric_characters()
+    {
+        Livewire::test(Reservation::class)
+            ->set('arrival_date', "abcded/12/2020")
             ->assertHasErrors('arrival_date');
     }
 
@@ -54,10 +71,28 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
+    function it_checks_if_departure_date_is_in_dd_mm_yyyy_format()
+    {
+        Livewire::test(Reservation::class)
+            ->set('departure_date', "25-05-2022")
+            ->assertHasErrors('departure_date');
+    }
+
+    /** @test */
     function it_checks_if_departure_date_is_not_in_dd_mm_yyyy_format()
     {
         Livewire::test(Reservation::class)
-            ->set('departure_date', Carbon::now()->format('d f m Y'))
+            ->set('departure_date', 'Sep 12 2020')
+            ->assertHasErrors('departure_date');
+    }
+
+    /** @test */
+    function it_checks_if_departure_date_contain_alphanumeric_characters()
+    {
+        $this->expectException(\Exception::class);
+
+        Livewire::test(Reservation::class)
+            ->set('departure_date', "date/12/2020")
             ->assertHasErrors('departure_date');
     }
 
@@ -65,10 +100,10 @@ class ReservationTest extends TestCase
     function it_checks_if_arrival_date_is_before_departure_date()
     {
         Livewire::test(Reservation::class)
-            ->set('arrival_date', Carbon::now()->format('d/m/Y'))
-            ->set('departure_date', Carbon::now()->addDays(3)->format('d/m/Y'))
+            ->set('arrival_date', Carbon::now()->format('d-m-Y'))
+            ->set('departure_date', Carbon::now()->addDays(3)->format('d-m-Y'))
             ->assertHasNoErrors()
-            ->set('departure_date', Carbon::now()->subDays(10)->format('d/m/Y'))
+            ->set('departure_date', Carbon::now()->subDays(10)->format('d-m-Y'))
             ->assertHasErrors('departure_date');
     }
 
@@ -76,10 +111,10 @@ class ReservationTest extends TestCase
     function if_checks_if_departure_date_is_within_seven_days_of_arrival_date()
     {
         Livewire::test(Reservation::class)
-            ->set('arrival_date', Carbon::now()->format('d/m/Y'))
-            ->set('departure_date', Carbon::now()->addDays(7)->format('d/m/Y'))
+            ->set('arrival_date', Carbon::now()->format('d-m-Y'))
+            ->set('departure_date', Carbon::now()->addDays(7)->format('d-m-Y'))
             ->assertHasNoErrors()
-            ->set('departure_date', Carbon::now()->addDays(8)->format('d/m/Y'))
+            ->set('departure_date', Carbon::now()->addDays(8)->format('d-m-Y'))
             ->assertHasErrors('departure_date');
     }
 
@@ -102,7 +137,7 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
-    function it_checks_if_amount_is_greater_than_25000_but_less_than_49999()
+    function it_checks_if_amount_is_not_greater_than_25000_but_less_than_49999()
     {
         Livewire::test(Reservation::class)
             ->set('amount', 25000)
@@ -133,7 +168,7 @@ class ReservationTest extends TestCase
     function it_checks_if_amount_is_greater_than_50000()
     {
         Livewire::test(Reservation::class)
-            ->set('amount', rand(50000, 100000))
+            ->set('amount', 60000)
             ->assertHasNoErrors('amount');
     }
 
@@ -151,7 +186,7 @@ class ReservationTest extends TestCase
     {
         Livewire::test(Reservation::class)
             ->set('name', 'john doe')
-            ->assertHasErrors('name');
+            ->assertHasErrors('name_title');
     }
 
     /** @test */
@@ -159,7 +194,15 @@ class ReservationTest extends TestCase
     {
         Livewire::test(Reservation::class)
             ->set('name', 'John Doe')
-            ->assertHasNoErrors('name');
+            ->assertHasNoErrors('name_title');
+    }
+
+    /** @test */
+    function it_checks_if_name_contains_non_alphabets()
+    {
+        Livewire::test(Reservation::class)
+            ->set('name', 'John Doe@123(!')
+            ->assertHasErrors('name_alpha');
     }
 
     /** @test */
@@ -167,9 +210,11 @@ class ReservationTest extends TestCase
     {
         Livewire::test(Reservation::class)
             ->set('name', 'John Doe')
-            ->assertHasNoErrors('name')
+            ->assertHasNoErrors(['name_title','name_alpha'])
             ->set('name', 'John Doe some non title thing')
-            ->assertHasErrors('name');
+            ->assertHasErrors('name_title')
+            ->set('name', 'John Doe some non title thing !!!!')
+            ->assertHasErrors(['name_alpha','name_title']);
     }
 
     /** @test */
@@ -185,7 +230,7 @@ class ReservationTest extends TestCase
     function it_checks_if_birthday_is_in_dd_mm_yyyy_format()
     {
         Livewire::test(Reservation::class)
-            ->set('birthday', Carbon::now()->format('d/m/Y'))
+            ->set('birthday', Carbon::now()->format('d-m-Y'))
             ->assertHasNoErrors('birthday');
     }
 
@@ -194,8 +239,11 @@ class ReservationTest extends TestCase
     {
         Livewire::test(Reservation::class)
             ->set('birthday', Carbon::now()->format('d f m Y'))
+            ->assertHasErrors('birthday')
+            ->set('birthday', "invalid!@#123")
             ->assertHasErrors('birthday');
     }
+
 
     /** @test */
     function if_checks_if_cnic_is_required()
@@ -225,7 +273,7 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
-    function it_checks_if_cnic_is_not_numeric()
+    function it_checks_if_cnic_contains_alphabets()
     {
         Livewire::test(Reservation::class)
             ->set('cnic', 'abcdefghijklmnopqrstuvwxyz')
@@ -234,7 +282,7 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
-    function it_tests_if_cnic_has_no_special_characters()
+    function it_tests_if_cnic_has_special_characters()
     {
         Livewire::test(Reservation::class)
             ->set('cnic', '34202-7818-444')
@@ -299,7 +347,7 @@ class ReservationTest extends TestCase
         Livewire::test(Reservation::class)
             ->set('rating', null)
             ->call('save')
-            ->assertHasErrors('rating');
+            ->assertHasNoErrors('rating');
     }
 
     /** @test */
@@ -373,5 +421,4 @@ class ReservationTest extends TestCase
             ->call('save')
             ->assertSet('room_type', null);
     }
-
 }

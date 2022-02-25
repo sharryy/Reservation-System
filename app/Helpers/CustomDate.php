@@ -14,6 +14,6 @@ class CustomDate extends Carbon
 
     public static function myCustomParse($string)
     {
-        return static::rawCreateFromFormat('d/m/Y', $string);
+        return static::rawCreateFromFormat('d-m-Y', $string);
     }
 }

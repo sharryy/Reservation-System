@@ -49,7 +49,7 @@
                 <div class="col-md-12">
                     <h2 class="probootstrap-cta-heading">Reserve a room for your family <span> &mdash; Far far away behind the
               word mountains far.</span></h2>
-                    <div class="probootstrap-cta-button-wrap"><a href="#" class="btn btn-primary">Reserve now</a></div>
+                    <div class="probootstrap-cta-button-wrap"><a href="{{ route('reservations.index') }}" class="btn btn-primary">Reserve now</a></div>
                 </div>
             </div>
         </div>

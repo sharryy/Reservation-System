@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Helpers\CustomDate;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Str;
@@ -35,7 +35,7 @@ class Reservation extends Component
         'birthday' => 'required',
         'cnic' => 'required|string|min:13|max:13',
         'cnic_picture' => 'required|image|mimes:jpeg,png',
-        'rating' => 'numeric|in:1,2,3,4,5',
+        'rating' => 'nullable|numeric|in:1,2,3,4,5',
     ];
 
     protected $validationAttributes = [
@@ -50,13 +50,17 @@ class Reservation extends Component
 
     public function updatedArrivalDate($value)
     {
+        $this->resetErrorBag('arrival_date');
+        $this->validateOnly('arrival_date');
         $this->validateDateField($value, $reset_key = 'arrival_date');
     }
 
     public function updatedName($value)
     {
+        $this->resetErrorBag('name');
         $validated = Str::title($value);
-        if ($validated !== $value) $this->addError('name', 'Name must be in title case.');
+        if ($validated != $value) $this->addError('name_title', 'Name must be in title case');
+        if (!ctype_alpha(str_replace(' ', '', $value))) $this->addError('name_alpha', 'Name must contain only alphabets.');
         else $this->resetErrorBag('name');
     }
 
@@ -86,9 +90,8 @@ class Reservation extends Component
 
     public function updatedDepartureDate($value)
     {
-        if ($this->validateDateField($value, $reset_key = 'departure_date')) {
-            $this->validateArrivalAndDepartureDate($value);
-        }
+        $this->validateDateField($value, $reset_key = 'departure_date');
+        $this->validateArrivalAndDepartureDate($value);
     }
 
     public function updatedBirthday($value)
@@ -132,7 +135,7 @@ class Reservation extends Component
 
     public function validateArrivalAndDepartureDate($value)
     {
-        $difference = CustomDate::myCustomParse($value)->diffInDays(CustomDate::myCustomParse($this->arrival_date));
+        $difference = Carbon::parse($value)->diffInDays(Carbon::parse($this->arrival_date));
         $this->resetErrorBag('departure_date');
         if ($difference > 7) {
             $this->addError('departure_date', 'Departure date must be within 7 days of arrival date.');
@@ -145,10 +148,10 @@ class Reservation extends Component
     public function validateDateField($value, $reset_key = '')
     {
         try {
-            $corrected_date = CustomDate::myCustomParse($value)->format('d/m/Y');
+            $corrected_date = Carbon::parse($value)->format('d-m-Y');
             $this->resetErrorBag($reset_key);
             if ($corrected_date != $value) {
-                $this->addError($reset_key, 'Invalid date format. Use DD/MM/YYYY');
+                $this->addError($reset_key, 'Invalid date format. Use DD-MM-YYYY');
             } else {
                 return true;
             }
