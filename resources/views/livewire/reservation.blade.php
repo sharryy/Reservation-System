@@ -40,7 +40,12 @@
                                 <input wire:model="name"
                                        type="text" class="form-control" id="name"
                                        aria-describedby="name">
-                                @error('name') <span class="error text-danger">{{ $message }}</span> @enderror
+                                @error('name_alpha')
+                                <span class="error text-danger">{{ $message }}</span>
+                                @enderror
+                                @error('name_title')
+                                <span class="error text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
