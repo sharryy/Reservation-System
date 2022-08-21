@@ -38,14 +38,6 @@ class ReservationTest extends TestCase
     }
 
     /** @test */
-    function it_tests_if_arrival_date_is_in_dd_mm_yyyy_format()
-    {
-        Livewire::test(Reservation::class)
-            ->set('arrival_date', "25-05-2022")
-            ->assertHasNoErrors('arrival_date');
-    }
-
-    /** @test */
     function it_tests_if_arrival_date_is_not_in_dd_mm_yyyy_format()
     {
         Livewire::test(Reservation::class)
