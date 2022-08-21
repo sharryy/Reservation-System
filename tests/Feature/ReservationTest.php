@@ -16,7 +16,7 @@ class ReservationTest extends TestCase
         Livewire::test(Reservation::class)
             ->set('arrival_date', null)
             ->call('save')
-            ->assertHasErrors('arrival_date');
+            ->assertHasErrors('arrivsdasfdsafdsfal_date');
     }
 
     /** @test */
