@@ -116,7 +116,7 @@ class ReservationTest extends TestCase
         Livewire::test(Reservation::class)
             ->set('amount', null)
             ->call('save')
-            ->assertHasErrors('amount');
+            ->assertHasErrors('amountdsfsd');
     }
 
     /** @test */
